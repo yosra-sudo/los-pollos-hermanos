@@ -49,6 +49,125 @@ void deplacerPerso (perso *p,int dt){
     p->position.x -= dx ;
    
 }
+int test_scrolling(perso p)
+
+{
+
+    if(p.direction==0)
+
+    {
+
+        if ((p.pos.x<820)&&(p.bg.x+p.bg.w>1440))
+
+            return 1;
+
+        else if(p.bg.x+p.bg.w>-0)
+
+            return 2;
+
+        else if(p.pos.x+p.pos.w<1400)
+
+            return 0;
+
+    }
+
+    else if(p.direction==1)
+
+    {
+
+        if ((p.pos.x>600)&&(p.bg.x<-10))
+
+            return 1;
+
+        else if(p.bg.x<-10)
+
+            return 2;
+
+        else if(p.pos.x>10)
+
+            return 0;
+
+    }
+
+    return 0;
+
+}
+
+perso scrolling_background(perso p)
+
+{
+
+    if(color_test(p.background[1],p)==0)
+
+        if(p.direction==0)
+
+        {
+
+            if ((p.pos.x<820)&&(p.bg.x+p.bg.w>1440))
+
+            {
+
+                p.pos.x=p.pos.x+p.speed;
+
+                p.bg.x=p.bg.x-p.speed;
+
+                p.pos_absolue=-p.speed;
+
+            }
+
+            else if(p.bg.x+p.bg.w>1920)
+
+            {
+
+                p.bg.x=p.bg.x-(2*p.speed);
+
+                p.pos_absolue=-(2*p.speed);
+
+            }
+
+            else if(p.pos.x+p.pos.w<1920)
+
+                p.pos.x=p.pos.x+(2*p.speed);
+
+        }
+
+    if(color_test(p.background[1],p)==0)
+
+        if(p.direction==1)
+
+        {
+
+            if ((p.pos.x>600)&&(p.bg.x<-10))
+
+            {
+
+                p.pos.x=p.pos.x-p.speed;
+
+                p.bg.x=p.bg.x+p.speed;
+
+                p.pos_absolue=p.speed;
+
+            }
+
+            else if(p.bg.x<-11)
+
+            {
+
+                p.bg.x=p.bg.x+(2*p.speed);
+
+                p.pos_absolue=(2*p.speed);
+
+            }
+
+            else if(p.pos.x>20)
+
+                p.pos.x=p.pos.x-(2*p.speed);
+
+        }
+
+    return p;
+
+}
 
 
 void saut (perso* p) {
