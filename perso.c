@@ -23,6 +23,32 @@ void initPerso(perso *p){
 
    /////////////////////////
 }
+void initialiser_background(background *b)
+{
+SDL_Surface *img_b=NULL;
+
+
+b->img_b=IMG_Load("bg_image.png");
+b->scroll.x=0;
+b->scroll.y=0;
+b->scroll.w=6000;
+b->scroll.h=1121;
+
+if(Mix_OpenAudio(44100,MIX_DEFAULT_FORMAT,MIX_DEFAULT_CHANNELS,1024)==-1)
+{
+printf("%s",Mix_GetError());
+}
+
+b->music=Mix_LoadMUS("music.mp3");
+
+Mix_PlayMusic(b->music, -1);
+}
+
+
+void afficher_background(background b, SDL_Surface *ecran)
+{
+SDL_BlitSurface(b.img_b,&(b.scroll),ecran,NULL);
+}
 
 
 void afficherPerso(perso p, SDL_Surface * screen){
@@ -49,125 +75,76 @@ void deplacerPerso (perso *p,int dt){
     p->position.x -= dx ;
    
 }
-int test_scrolling(perso p)
-
+void scrolling(background *b, int dire , int pasavancement)
 {
+	if(dire==1)
+	{
+		b->scroll.x+=pasavancement;
 
-    if(p.direction==0)
+		if(b->scroll.x<=0)
+			b->scroll.x=0;
+		if(b->scroll.x>=6000-900)
+			b->scroll.x=6000;
+		
+	}
+	else if(dire==2)
+	{
+		
+		b->scroll.x-=pasavancement;
 
-    {
+		if(b->scroll.x<=0)
+			b->scroll.x=0;
+		if(b->scroll.x>=6000-900)
+			b->scroll.x=6000;
 
-        if ((p.pos.x<820)&&(p.bg.x+p.bg.w>1440))
+	}
+	else if(dire==5)
+	{
+		b->scroll.x+=pasavancement+2;
+		
+		if(b->scroll.x<=0)
+			b->scroll.x=0;
+		if(b->scroll.x>=5000-900)
+			b->scroll.x=5000-900;
 
-            return 1;
+	}
+	else if(dire==6)
+	{
+		
+		b->scroll.x-=pasavancement+2;
 
-        else if(p.bg.x+p.bg.w>-0)
+		if(b->scroll.x<=0)
+			b->scroll.x=0;
+		if(b->scroll.x>=5000-900)
+			b->scroll.x=5000-900;
 
-            return 2;
+	}
+         else if(dire==4)
+	{
+		
+		b->scroll.x+=pasavancement;
 
-        else if(p.pos.x+p.pos.w<1400)
+		if(b->scroll.x<=0)
+			b->scroll.x=0;
+		if(b->scroll.x>=5000-1121)
+			b->scroll.x=5000-1121;
 
-            return 0;
+	}
 
-    }
+	
+	else if(dire==3)	{
+		
+		b->scroll.y+=pasavancement;
 
-    else if(p.direction==1)
 
-    {
-
-        if ((p.pos.x>600)&&(p.bg.x<-10))
-
-            return 1;
-
-        else if(p.bg.x<-10)
-
-            return 2;
-
-        else if(p.pos.x>10)
-
-            return 0;
-
-    }
-
-    return 0;
-
+	}
+	else if (dire == 0)
+	{
+		b->scroll.y-=pasavancement;
+	}
+	
 }
 
-perso scrolling_background(perso p)
-
-{
-
-    if(color_test(p.background[1],p)==0)
-
-        if(p.direction==0)
-
-        {
-
-            if ((p.pos.x<820)&&(p.bg.x+p.bg.w>1440))
-
-            {
-
-                p.pos.x=p.pos.x+p.speed;
-
-                p.bg.x=p.bg.x-p.speed;
-
-                p.pos_absolue=-p.speed;
-
-            }
-
-            else if(p.bg.x+p.bg.w>1920)
-
-            {
-
-                p.bg.x=p.bg.x-(2*p.speed);
-
-                p.pos_absolue=-(2*p.speed);
-
-            }
-
-            else if(p.pos.x+p.pos.w<1920)
-
-                p.pos.x=p.pos.x+(2*p.speed);
-
-        }
-
-    if(color_test(p.background[1],p)==0)
-
-        if(p.direction==1)
-
-        {
-
-            if ((p.pos.x>600)&&(p.bg.x<-10))
-
-            {
-
-                p.pos.x=p.pos.x-p.speed;
-
-                p.bg.x=p.bg.x+p.speed;
-
-                p.pos_absolue=p.speed;
-
-            }
-
-            else if(p.bg.x<-11)
-
-            {
-
-                p.bg.x=p.bg.x+(2*p.speed);
-
-                p.pos_absolue=(2*p.speed);
-
-            }
-
-            else if(p.pos.x>20)
-
-                p.pos.x=p.pos.x-(2*p.speed);
-
-        }
-
-    return p;
-
-}
 
 
 void saut (perso* p) {
